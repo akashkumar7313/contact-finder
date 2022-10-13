@@ -1,6 +1,10 @@
 const express = require('express');
 const PORT = 4001;
 const app = express();
+const connectDB = require('./config/db');
+
+//connect momngoDB
+connectDB();
 
 //Routes
 app.use('/api/auth', require('./routes/auth'));
