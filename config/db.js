@@ -1,16 +1,9 @@
-const mongoose = require('mongoose');
+const mongo = require('mongoose');
 const config = require('config');
+const mongoURI = config.get('mongoURI');
 
-const mongoUri = config.get('mongoURI');
 const connectDB = () => {
-    mongoose.connect(mongoUri, { useNewUrlParser: true }).then(
-        () => console.log("mongoDB connected...")
-    ).catch(
-        (err) => {
-            console.log("Could not connect with mongoDB", err.message);
-            process.exit(1);
-        }
-    );
+    mongo.connect(mongoURI, {useNewUrlParser:true}).then(() => console.log("MongoDB connected...")).catch( err => console.log(err.message));
 }
 
 module.exports = connectDB;

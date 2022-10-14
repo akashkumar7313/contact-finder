@@ -1,10 +1,13 @@
 const express = require('express');
 const PORT = 4001;
 const app = express();
-const connectDB = require('./config/db');
+const conDB = require('./config/db');
 
-//connect momngoDB
-connectDB();
+//Connect DB
+conDB();
+
+//Init middleware
+app.use(express.json({extended:false}));
 
 //Routes
 app.use('/api/auth', require('./routes/auth'));
