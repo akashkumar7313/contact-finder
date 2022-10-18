@@ -30,6 +30,13 @@ router.post(
         });
     }
     const { email, name, password } = request.body;
+
+    if(User.findOne({ email })){
+        return response.status(409).json({
+            message: "User already exists."
+        });
+    }
+
     let user = new User({
       email,
       name,
