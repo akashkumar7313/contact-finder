@@ -1,18 +1,29 @@
-const { response } = require('express');
-const express = require('express');
-const Contact = require('../models/Contact');
+const express = require("express");
 const router = express.Router();
+const Contact = require("../models/Contact");
+const User = require("../models/User");
 const { check, validationResult } = require("express-validator");
+const authMiddleware = require("../middleware/auth");
 
 /**
  * @route   GET /api/contacts
  * @desc    Get all Contacts
  * @access  Private
  */
-router.get('/', (request, response) => {
+router.get("/", [authMiddleware], async (request, response) => {
+  try {
+    const contacts = await Contact.find({ user: request.user.id });
     response.json({
-        msg: "Get all contacts"
+      success: true,
+      message: "",
+      data: contacts,
     });
+  } catch (err) {
+    return response.status(500).json({
+      success: false,
+      message: err.messsage,
+    });
+  }
 });
 
 /**
@@ -20,29 +31,32 @@ router.get('/', (request, response) => {
  * @desc    Create Contact
  * @access  Private
  */
-router.post('/', 
-[
-  check("name", "Name is required").not().isEmpty(),
-  check("phone", "Phone is required").not().isEmpty(),
-  check("phone", "Please enter a valid phone number").isLength({ min: 10 }),
-  check("email", "Please enter a valid Email").isEmail(),
-],
-async (request, response) => {
+router.post(
+  "/",
+  [
+    authMiddleware,
+    check("name", "Name is required").not().isEmpty(),
+    check("phone", "Phone is required").not().isEmpty(),
+    check("phone", "Please enter a valid phone number").isLength({ min: 10 }),
+    check("email", "Please enter a valid Email").isEmail(),
+  ],
+  async (request, response) => {
     const validationErrors = validationResult(request);
-    if(!validationErrors.isEmpty()){
+    if (!validationErrors.isEmpty()) {
       return response.status(400).json({
         success: false,
         errors: validationErrors.array(),
       });
     }
-
-    const {name, email,phone, address, type} = request.body;
+    const user = await User.findById(request.user.id);
+    const { name, email, phone, address, type } = request.body;
     let contact = new Contact({
-        name,
-        email,
-        phone,
-        address,
-        type
+      user,
+      name,
+      email,
+      phone,
+      address,
+      type,
     });
     contact.contactType = type;
     try {
@@ -54,32 +68,32 @@ async (request, response) => {
       });
     }
     return response.json({
-        success: true,
-        message: "Contact Created"
+      success: true,
+      message: "Contact Created",
     });
-});
+  }
+);
 
 /**
  * @route   PUT /api/contacts
  * @desc    Update Contact
  * @access  Private
  */
-router.put('/:id', (request, response) => {
-    response.json({
-        msg: "Update Contact"
-    })
+router.put("/:id", [authMiddleware], (request, response) => {
+  response.json({
+    msg: "Update Contact",
+  });
 });
-
 
 /**
  * @route   DELETE /api/contacts
  * @desc    Delete contact
  * @access  Private
  */
-router.delete('/:id', (request, response) => {
-    response.json({
-        msg: "Delete contact"
-    });
+router.delete("/:id", [authMiddleware], (request, response) => {
+  response.json({
+    msg: "Delete contact",
+  });
 });
 
 module.exports = router;
