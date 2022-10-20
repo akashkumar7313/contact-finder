@@ -5,6 +5,7 @@ module.exports = function(request, response, next) {
     const token = request.header('x-auth-token');
     if(!token){
         return response.status(401).json({
+            success:false,
             message: "Unauthorized, access denied!"
         });
     }
@@ -14,6 +15,7 @@ module.exports = function(request, response, next) {
     }
     catch(err){
         return response.status(401).json({
+            success: false,
             message: err.message
         });
     }

@@ -4,16 +4,27 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const authMiddleware = require('../middleware/auth');
 
 /**
  * @route   GET api/auth
  * @desc    Get logged in user
  * @access  Private
  */
-router.get("/", (request, response) => {
-  response.json({
-    msg: "Logged in User",
-  });
+router.get("/", [authMiddleware], async (request, response) => {
+    try {
+        const user = await User.findById(request.user.id);
+        return response.json({
+          success: true,
+          message: '',
+          data: user || {}
+        });
+    } catch(err) {
+        return response.status(500).json({
+            success: false,
+            message: err.message
+        });
+    }
 });
 
 /**
