@@ -28,4 +28,4 @@ Navbar.defaultProps = {
     icon: 'fas fa-id-card-alt'
 }
 
-export default Navbar
+export default Navbar;

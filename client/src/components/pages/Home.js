@@ -1,9 +1,15 @@
-import React from 'react'
+import React from "react";
+import Contacts from "../contacts/Contacts";
 
 const Home = () => {
   return (
-    <div className='container'>Home</div>
-  )
-}
+    <div className="grid-2">
+      <div>Contact Forms</div>
+      <div>
+        <Contacts />
+      </div>
+    </div>
+  );
+};
 
-export default Home
+export default Home;
