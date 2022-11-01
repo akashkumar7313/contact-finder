@@ -1,4 +1,4 @@
 {
-    "mongoURI": "mongodb://localhost:27017/contact-keeper",
+    "mongoURI": "mongodb+srv://admin:admin@contactkeeper01.1q9iaso.mongodb.net/?retryWrites=true&w=majority",
     "jwtSecret": "Y29udGFjdC1rZWVwZXI="
 }

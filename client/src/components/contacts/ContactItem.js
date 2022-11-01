@@ -5,7 +5,7 @@ import ContactContext from '../../context/contact/contactContext';
 const ContactItem = ({contact}) => {
   const contactContext = useContext(ContactContext);
   const { deleteContact, setCurrent } = contactContext;
-  const { id, name, email, phone, type } = contact;
+  const { name, email, phone, type } = contact;
 
   return (
     <Fragment>

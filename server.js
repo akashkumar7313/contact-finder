@@ -2,12 +2,14 @@ const express = require('express');
 const PORT = 4001;
 const app = express();
 const conDB = require('./config/db');
+const cors = require('cors');
 
 //Connect DB
 conDB();
 
 //Init middleware
 app.use(express.json({extended:false}));
+app.use(cors());
 
 //Routes
 app.use('/api/auth', require('./routes/auth'));
